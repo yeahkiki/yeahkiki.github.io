@@ -1,27 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Categories on 黄伟亮的博客</title>
-    <link>https://huangweiliang.com/categories/</link>
-    <description>Recent content in Categories on 黄伟亮的博客</description>
+    <title>Categories on 马琪苇的博客</title>
+    <link>https://www.maqiwei.com/categories/</link>
+    <description>Recent content in Categories on 马琪苇的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 30 Aug 2021 17:22:22 +0800</lastBuildDate><atom:link href="https://huangweiliang.com/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Sep 2021 15:22:22 +0800</lastBuildDate><atom:link href="https://www.maqiwei.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>CSS</title>
-      <link>https://huangweiliang.com/categories/CSS/</link>
-      <pubDate>Mon, 30 Aug 2021 17:22:22 +0800</pubDate>
+      <title>设计</title>
+      <link>https://www.maqiwei.com/categories/%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Wed, 01 Sep 2021 15:22:22 +0800</pubDate>
       
-      <guid>https://huangweiliang.com/categories/CSS/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>GitHub</title>
-      <link>https://huangweiliang.com/categories/GitHub/</link>
-      <pubDate>Thu, 26 Aug 2021 14:10:35 +0800</pubDate>
-      
-      <guid>https://huangweiliang.com/categories/GitHub/</guid>
+      <guid>https://www.maqiwei.com/categories/%E8%AE%BE%E8%AE%A1/</guid>
       <description></description>
     </item>
     

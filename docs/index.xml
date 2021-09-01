@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>黄伟亮的博客</title>
+    <link>https://huangweiliang.com/</link>
+    <description>Recent content on 黄伟亮的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 30 Aug 2021 17:22:22 +0800</lastBuildDate><atom:link href="https://huangweiliang.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>什么是HSL?</title>
+      <link>https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/</link>
+      <pubDate>Mon, 30 Aug 2021 17:22:22 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/</guid>
+      <description>我相信您已经熟悉使用RGB和HEX在CSS中表示颜色，但这些并不是在CSS中编写颜色的最佳方法。HEX和RGB非常难以理解，如您尝试使颜色变暗、变亮或者将颜色从红色转换为橙色并不是很容易。而HSL是一种更容易阅读的格式，它使得更改颜色的亮度或者色调等操作非常简单。 什么是HSL? HSL(hue,</description>
+    </item>
+    
+    <item>
+      <title>使用github.dev随时随地编写代码</title>
+      <link>https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Thu, 26 Aug 2021 14:10:35 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/</guid>
+      <description>现在使用浏览器打开任意一个仓库，将链接中 github.com 的 com 替换为 dev，即可开启一个在线的 VSCode 编辑器，可以对工程代码进行查看和编辑。 另外也支持快捷键，在 GitHub 仓库主页，点击键盘的 . 键，页面就会自动跳转到 VS Code 编辑环境，真是太方便了。</description>
+    </item>
+    
+    <item>
+      <title>OAuth2的四种方式</title>
+      <link>https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Wed, 25 Aug 2021 14:42:16 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/</guid>
+      <description>RFC 6749 OAuth 2.0 的标准是 RFC 6749 文件。该文件先解释了 OAuth 是什么。 OAuth 引入了一个授权层，用来分离两种不同的角色：客户端和资源所有者。&amp;hellip;&amp;hellip;资源所有者同意以后，资源服务器可以向客户端颁发令牌。客户端通过令牌，去请求数据。 这段话的意思就是，**OAuth 的核心就是向第三方应用</description>
+    </item>
+    
+    <item>
+      <title>PM2简易使用手册</title>
+      <link>https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</link>
+      <pubDate>Wed, 25 Aug 2021 10:52:35 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</guid>
+      <description>PM2简易使用手册 PM2 使用手册 很简单也很水，就是我今天因为公司项目正好在研究这个东西，权当自己记录了，不喜勿喷～～～万分感谢 背景 对于线上项目，如果直接通过 node app 来启动，如果报错了可能直接停止导致整个服务崩溃，一般监控 node 有几种方案。 supervisor: 一般用作开发环境的使用。 forever: 管理多个站点，一般每个站点</description>
+    </item>
+    
+    <item>
+      <title>关于我</title>
+      <link>https://huangweiliang.com/about/</link>
+      <pubDate>Wed, 25 Aug 2021 10:19:27 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/about/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>工具</title>
+      <link>https://huangweiliang.com/tools/</link>
+      <pubDate>Wed, 25 Aug 2021 10:19:27 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/tools/</guid>
+      <description>Snipaste https://zh.snipaste.com/ Snipaste 是一个简单但强大的截图工具，也可以让你将截图贴回到屏幕上！吸取屏幕颜色为十六进制值等！ 色彩无障碍设计（Color Accessibility）工具 https://webaim.org/resources/contrastchecker/ https://color.review/ Design System https://nasa.github.io/nasawds-site/components/ https://material.io/ VirusTotal https://www.virustotal.com/gui/home/upload VirusTotal.com是一个免费的病毒、蠕虫、木马和各种恶意软件分析服务，可以针对可疑文件和网址进行快速检测</description>
+    </item>
+    
+    <item>
+      <title>归档</title>
+      <link>https://huangweiliang.com/archives/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://huangweiliang.com/archives/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>搜索</title>
+      <link>https://huangweiliang.com/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://huangweiliang.com/search/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

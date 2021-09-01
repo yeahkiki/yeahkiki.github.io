@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>GitHub on 黄伟亮的博客</title>
+    <link>https://huangweiliang.com/tags/GitHub/</link>
+    <description>Recent content in GitHub on 黄伟亮的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Thu, 26 Aug 2021 14:10:35 +0800</lastBuildDate><atom:link href="https://huangweiliang.com/tags/GitHub/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用github.dev随时随地编写代码</title>
+      <link>https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/</link>
+      <pubDate>Thu, 26 Aug 2021 14:10:35 +0800</pubDate>
+      
+      <guid>https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/</guid>
+      <description>现在使用浏览器打开任意一个仓库，将链接中 github.com 的 com 替换为 dev，即可开启一个在线的 VSCode 编辑器，可以对工程代码进行查看和编辑。 另外也支持快捷键，在 GitHub 仓库主页，点击键盘的 . 键，页面就会自动跳转到 VS Code 编辑环境，真是太方便了。</description>
+    </item>
+    
+  </channel>
+</rss>

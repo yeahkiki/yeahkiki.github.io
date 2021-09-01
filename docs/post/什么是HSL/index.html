@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>什么是HSL? | 黄伟亮的博客</title>
+    <meta property="og:title" content="什么是HSL? - 黄伟亮的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-08-30T17:22:22&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-08-30T17:22:22&#43;08:00'>
+        
+    <meta name="Keywords" content="JavaScript,javascriptvue,react,黄伟亮,java,js,html,css,博客,项目管理,软件架构,小程序">
+    <meta name="description" content="什么是HSL?">
+        
+    <meta name="author" content="黄伟亮">
+    <meta property="og:url" content="https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+        <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet">
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://huangweiliang.com/">
+                        黄伟亮的博客
+                    </a>
+                
+                <p class="description">专注于JavaScript、Vue、React、HTML/CSS、小程序、Java、项目管理、软件架构</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://huangweiliang.com/">首页</a>
+                    
+                    <a  href="https://huangweiliang.com/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://huangweiliang.com/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://huangweiliang.com/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -260px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#什么是hsl">什么是HSL?</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#如何使用hsl">如何使用HSL?</a></li>
+    <li><a href="#为什么hsl很重要">为什么HSL很重要？</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">什么是HSL?</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2021年8月30日
+        </date>
+        
+        <div class="post-meta">
+            <span>|</span>
+            
+            <span class="meta-category"><a href='/categories/CSS'>CSS</a></span>
+            
+        </div>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>我相信您已经熟悉使用RGB和HEX在CSS中表示颜色，但这些并不是在CSS中编写颜色的最佳方法。HEX和RGB非常难以理解，如您尝试使颜色变暗、变亮或者将颜色从红色转换为橙色并不是很容易。而HSL是一种更容易阅读的格式，它使得更改颜色的亮度或者色调等操作非常简单。</p>
+<h2 id="什么是hsl">什么是HSL?</h2>
+<p>HSL(<em>hue</em>, <em>saturation</em>, <em>lightness</em>)代表色相，饱和度和亮度。这类似于RGB通过红色、绿色、蓝色的值组合在一起来表示颜色，但使用HSL，这些值更加直观。</p>
+<h4 id="色相">色相</h4>
+<p>颜色的色相由围绕圆圈的度数表示。试想一个色轮，其中0度表示红色，180度表示青色，240度表示蓝色，360度表示红色。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830174315843.png">
+            <img class="mx-auto" alt="image-20210830174315843" src="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830174315843.png" />
+        </a>
+    </p>
+<h4 id="饱和度">饱和度</h4>
+<p>饱和度由 0 到 100 之间的百分比表示，并确定颜色的灰色程度。0％ 表示灰色阴影，而 100％ 是全色。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830174510986.png">
+            <img class="mx-auto" alt="image-20210830174510986" src="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830174510986.png" />
+        </a>
+    </p>
+<h4 id="亮度">亮度</h4>
+<p>亮度也是用百分比表示。如果颜色是50%的亮度，那么意味着没有额外的白色或黑色添加到颜色中。当百分比增加到50%以上时，它将会为颜色添加更多的白色，直到100%亮度时会完全白色。当百分比降低到50%以下时，它将会为颜色添加更多黑色，直到0%亮度时将会完全黑色。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830175243026.png">
+            <img class="mx-auto" alt="image-20210830175243026" src="/images/%e4%bb%80%e4%b9%88%e6%98%afHSL/image-20210830175243026.png" />
+        </a>
+    </p>
+<h2 id="如何使用hsl">如何使用HSL?</h2>
+<p>我们了解了什么是HSL，现在我们可以在CSS中尝试使用HSL。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">class</span> {
+	<span style="color:#998;font-style:italic">/* 红色 #FF0000 */</span>
+    <span style="color:#000;font-weight:bold">background-color</span>: <span style="color:#0086b3">hsl</span>(<span style="color:#099">0</span>, <span style="color:#099">100</span><span style="color:#458;font-weight:bold">%</span>, <span style="color:#099">50</span><span style="color:#458;font-weight:bold">%</span>);
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>传递给<code>hsl()</code>的第一个值是色相，它是介于0到360之前的度数值，第二个值是饱和度，它是介于0%到100%之间的百分比值，最后一个值是亮度，它是0%到100%之间的百分比值。您还可以使用<code>hsla()</code>来表示部分透明的颜色，该函数接收第四个参数，它是一个介于0到1之间的值，其中1表示完全不透明，0表示完全透明。</p>
+<h2 id="为什么hsl很重要">为什么HSL很重要？</h2>
+<p>像这样书写颜色咋一看似乎有点奇怪，因为您很可能已经习惯了HEX或RGB,，但是一旦您习惯了HSL，就会使编写CSS变得更加有趣。以下是几个原因：</p>
+<h4 id="轻松改变亮度饱和度">轻松改变亮度/饱和度</h4>
+<p>正如我在本文开头提到的，您经常需要在CSS中更改颜色的亮度或饱和度，例如实现更改按钮悬停状态背景色之类的操作。使用<code>HEX</code>可能会很烦，因为您压根不知道原本颜色暗<code>10%</code>的颜色值是多少。如果使用<code>HSL</code>，假如有背景色<code>hsl(200, 100%, 50%)</code>，您将很容易计算出暗10%的背景色，您只需将亮度值降低10%即可，得到<code>hsl(200, 100%, 40%)</code>。</p>
+<p>您甚至可以更进一步地，在CSS中使用<code>calc()</code>和自定义属性来优化您的代码。例如：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-css" data-lang="css">.<span style="color:#458;font-weight:bold">btn</span> {
+  <span style="color:#008080">--background-hue</span>: <span style="color:#099">200</span>;
+  <span style="color:#008080">--lightness-offset</span>: <span style="color:#099">0</span><span style="color:#458;font-weight:bold">%</span>;
+  <span style="color:#000;font-weight:bold">background-color</span>: <span style="color:#0086b3">hsl</span>(
+    <span style="color:#900;font-weight:bold">var</span>(<span style="color:#000;font-weight:bold">--</span>background<span style="color:#000;font-weight:bold">-</span><span style="color:#000;font-weight:bold">hue</span>),
+    <span style="color:#099">100</span><span style="color:#458;font-weight:bold">%</span>,
+    <span style="color:#0086b3">calc</span>(<span style="color:#099">50</span><span style="color:#458;font-weight:bold">%</span> <span style="color:#000;font-weight:bold">+</span> <span style="color:#900;font-weight:bold">var</span>(<span style="color:#000;font-weight:bold">--</span>lightness<span style="color:#000;font-weight:bold">-</span>offset))
+  );
+}
+
+.<span style="color:#458;font-weight:bold">btn</span>:<span style="color:#3c5d5d;font-weight:bold">hover</span> {
+  <span style="color:#008080">--lightness-offset</span>: <span style="color:#099">-10</span><span style="color:#458;font-weight:bold">%</span>;
+}
+
+.<span style="color:#458;font-weight:bold">btn</span>:<span style="color:#3c5d5d;font-weight:bold">focus</span> {
+  <span style="color:#008080">--lightness-offset</span>: <span style="color:#099">-20</span><span style="color:#458;font-weight:bold">%</span>;
+}
+
+.<span style="color:#458;font-weight:bold">btn-danger</span> {
+  <span style="color:#008080">--background-hue</span>: <span style="color:#099">0</span>;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>通过少量的代码，我们编写了一个基本的btn样式类，它在悬停时变暗10%，在聚焦时变暗20%。</p>
+<h4 id="轻松获取相关颜色">轻松获取相关颜色</h4>
+<p>如果您熟悉一点关于色彩的理论，那您可能了解互补色、对比色和类似色等，这些不太类型的颜色用GRB或HEX很难弄清楚，但使用HSL很容易找到诸如互补色之类的颜色，因为互补色只是色轮上另一侧的颜色，在HSL的情况下，这意味着它们的色相之间相差180。</p>
+<h4 id="轻松改变色相">轻松改变色相</h4>
+<p>最后，HSL重要的一点是可以轻松更改颜色的色相。如果您想让您的红色变得橙色一点，你可以通过让你的色相更大一点轻松完成，因为橙色在色轮上紧随红色之后。</p>
+<h2 id="总结">总结</h2>
+<p>HSL 是一种在 CSS 中表示颜色的不同方式，它不仅更易于阅读，而且在 CSS 中更易于修改和使用。在我看来，它是 CSS 中最好的颜色格式。</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://huangweiliang.com/">黄伟亮</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/">https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/">使用github.dev随时随地编写代码</a></li>
+        
+        <li><a href="/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/">OAuth2的四种方式</a></li>
+        
+        <li><a href="/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">PM2简易使用手册</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/tools/">工具</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            <ul class="clearfix">
+                
+                <li><a href='/tags/CSS'>CSS</a></li>
+                
+            </ul>
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "hellowillian21/hellowillian21.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="https://huangweiliang.com/">黄伟亮的博客</a>
+        
+    </div>
+    <br />
+    <div>
+        本站仅为本人的学习笔记，部分内容来自网络，如果侵权请联系删除，谢谢大家！
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://huangweiliang.com/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://huangweiliang.com/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/" title="什么是HSL?">什么是HSL?</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/" title="使用github.dev随时随地编写代码">使用github.dev随时随地编写代码</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/" title="OAuth2的四种方式">OAuth2的四种方式</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="PM2简易使用手册">PM2简易使用手册</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://huangweiliang.com/categories/CSS/">CSS (1)</a></li>
+    
+    <li><a href="https://huangweiliang.com/categories/GitHub/">GitHub (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://huangweiliang.com/tags/CSS/">CSS</a>
+    
+    <a href="https://huangweiliang.com/tags/GitHub/">GitHub</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://duckweeds7.com/" title="Duckweeds7">Duckweeds7</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://www.huangzhishou.com/" title="黄智守的博客">黄智守的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://eps.ink" title="胡荣的博客">胡荣的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="https://chrischan13.gitee.io/wdnmd/" title="WDNMD">WDNMD</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://blog.lliiooiill.cn/" title="lliiooiill">lliiooiill</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://huangweiliang.com/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>PM2简易使用手册 | 黄伟亮的博客</title>
+    <meta property="og:title" content="PM2简易使用手册 - 黄伟亮的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-08-25T10:52:35&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-08-25T10:52:35&#43;08:00'>
+        
+    <meta name="Keywords" content="JavaScript,javascriptvue,react,黄伟亮,java,js,html,css,博客,项目管理,软件架构,小程序">
+    <meta name="description" content="PM2简易使用手册">
+        
+    <meta name="author" content="黄伟亮">
+    <meta property="og:url" content="https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+        <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet">
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://huangweiliang.com/">
+                        黄伟亮的博客
+                    </a>
+                
+                <p class="description">专注于JavaScript、Vue、React、HTML/CSS、小程序、Java、项目管理、软件架构</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://huangweiliang.com/">首页</a>
+                    
+                    <a  href="https://huangweiliang.com/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://huangweiliang.com/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://huangweiliang.com/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -260px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#pm2-使用手册">PM2 使用手册</a>
+      <ul>
+        <li><a href="#背景">背景</a></li>
+        <li><a href="#pm2-的主要特性">PM2 的主要特性</a></li>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#用法">用法</a></li>
+        <li><a href="#配置-pm2-启动文件">配置 PM2 启动文件</a></li>
+        <li><a href="#负载均衡">负载均衡</a></li>
+      </ul>
+    </li>
+    <li><a href="#日志相关">日志相关</a>
+      <ul>
+        <li><a href="#pm2日志">pm2日志</a></li>
+        <li><a href="#日志分割">日志分割</a></li>
+      </ul>
+    </li>
+    <li><a href="#配合pm2-web实现监控可视化">配合pm2-web实现监控可视化</a>
+      <ul>
+        <li><a href="#安装-1">安装</a></li>
+        <li><a href="#使用">使用</a></li>
+        <li><a href="#谢谢">谢谢～～～</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">PM2简易使用手册</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2021年8月25日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f3205a660b84b-1629864458220">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f3205a660b84b-1629864458220" />
+        </a>
+    </p>
+<h1 id="pm2简易使用手册">PM2简易使用手册</h1>
+<h2 id="pm2-使用手册">PM2 使用手册</h2>
+<p>很简单也很水，就是我今天因为公司项目正好在研究这个东西，权当自己记录了，不喜勿喷～～～万分感谢</p>
+<h3 id="背景">背景</h3>
+<p>对于线上项目，如果直接通过 node app 来启动，如果报错了可能直接停止导致整个服务崩溃，一般监控 node 有几种方案。</p>
+<ul>
+<li>supervisor: 一般用作开发环境的使用。</li>
+<li>forever: 管理多个站点，一般每个站点的访问量不大的情况，不需要监控。</li>
+<li>PM2: 网站的访问量比较大，需要完整的监控页面。</li>
+</ul>
+<blockquote>
+<p>公司原来的项目采用的是 forever 的形式，不过如果 node 出现问题的时候，没有办法获取到有效的监控数据进行错误排查，因此新开发的系统准备采用 pm2 的形式进行前端以及 node 层的监控。</p>
+</blockquote>
+<h3 id="pm2-的主要特性">PM2 的主要特性</h3>
+<ul>
+<li>内建负载均衡（使用 Node cluster 集群模块）</li>
+<li>后台运行</li>
+<li>0 秒停机重载，我理解大概意思是维护升级的时候不需要停机.</li>
+<li>具有 Ubuntu 和 CentOS 的启动脚本</li>
+<li>停止不稳定的进程（避免无限循环）</li>
+<li>控制台检测</li>
+<li>提供 HTTP API</li>
+<li>远程控制和实时的接口 API ( Nodejs 模块,允许和 PM2 进程管理器交互 )</li>
+</ul>
+<h3 id="安装">安装</h3>
+<pre><code>// 全局安装pm2，依赖node和npm
+npm install -g pm2
+复制代码
+</code></pre><h3 id="用法">用法</h3>
+<ul>
+<li>基本启动命令</li>
+</ul>
+<blockquote>
+<p>pm2 start</p>
+</blockquote>
+<pre><code>// start命令启动对应的node server文件
+$ pm2 start ./build/server.js
+复制代码
+</code></pre><ul>
+<li>通过配置文件进行启动稍后详细讲解</li>
+</ul>
+<p>启动之后，控制台会看到如下消息：</p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2ba717997b20-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2ba717997b20-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>如上图所示，可以看到项目<code>kafazhe</code>成功启动,id 是 0，并且状态时 online.</p>
+</blockquote>
+<ul>
+<li>查看详细状态信息</li>
+</ul>
+<blockquote>
+<p>pm2 show (appname|id)</p>
+</blockquote>
+<pre><code>$ pm2 show kaifazhe
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2bae6ed0fb41-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2bae6ed0fb41-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>如上图所示，可以查看到 kaifazhe 进程的详细信息</p>
+</blockquote>
+<ul>
+<li>查看所有启动的进程列表</li>
+</ul>
+<blockquote>
+<p>pm2 list</p>
+</blockquote>
+<pre><code>$ pm2 list
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2ba717997b20-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2ba717997b20-1629864458221" />
+        </a>
+    </p>
+<ul>
+<li>
+<p>监控每个 node 进程的 cpu 和内存使用情况</p>
+<blockquote>
+<p>pm2 monit</p>
+</blockquote>
+</li>
+</ul>
+<pre><code>$ pm2 monit
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b9519339ad1-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b9519339ad1-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>可以使用 pm2 monit 功能监控所有 node 进程的运行情况，包括各种响应，错误信息。</p>
+</blockquote>
+<ul>
+<li>显示所有进程的日志信息</li>
+</ul>
+<blockquote>
+<p>pm2 logs</p>
+</blockquote>
+<pre><code>$ pm2 logs
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95198103f3-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95198103f3-1629864458221" />
+        </a>
+    </p>
+<ul>
+<li>监控运行这些进程的机器的状态</li>
+</ul>
+<blockquote>
+<p>pm2 web</p>
+</blockquote>
+<pre><code>$ pm2 web
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95199a77a9-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95199a77a9-1629864458221" />
+        </a>
+    </p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b958eb14dc3-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b958eb14dc3-1629864458221" />
+        </a>
+    </p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95194d9f80-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95194d9f80-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>我只能说，这也太 NB 了吧，不仅可以监控这些进程，还能监控运行这些进程的机器的状态，逆天了。然后它会自动起一个服务在指定端口，如图在 9615 启动了一个服务，我们可以访问。虽然我看不太懂，但是对于测试运维同学来说，应该挺有用的吧。</p>
+</blockquote>
+<ul>
+<li>停止 指定/所有 进程</li>
+</ul>
+<blockquote>
+<p>pm2 stop (id|all)</p>
+</blockquote>
+<pre><code>// 停止id为0的进程
+$ pm2 stop 0
+// 停止所有进程
+$ pm2 stop all
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95514f5929-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b95514f5929-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>如图，我们运行了两个服务状态都是 online，使用 stop 0 之后，kaifazhe 的服务变成了 stopped，然后使用 stop all，所有进程状态全变成了 stopped。</p>
+</blockquote>
+<ul>
+<li>重启 指定/所有 进程</li>
+</ul>
+<blockquote>
+<p>pm2 restart (id|all)</p>
+</blockquote>
+<pre><code>// 重启id为0的进程
+$ pm2 restart 0
+// 重启所有进程
+$ pm2 restart all
+复制代码
+</code></pre><ul>
+<li>杀死 指定/所有 进程</li>
+</ul>
+<blockquote>
+<p>pm2 delete (id|all)</p>
+</blockquote>
+<pre><code>// 杀死id为0的进程
+$ pm2 delete 0
+// 杀死所有进程
+$ pm2 delete all
+复制代码
+</code></pre><p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b9552c23eaa-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f2b9552c23eaa-1629864458221" />
+        </a>
+    </p>
+<blockquote>
+<p>从上图我们可以看出，restart 0 之后，0 进程从 stopped 状态变成了 online，然后我们使用 delete 0,进程 0 就消失不见了，我们再 delete all,可以看到现在没有任何进程在运行。</p>
+</blockquote>
+<h3 id="配置-pm2-启动文件">配置 PM2 启动文件</h3>
+<p>pm2 启动的方式可以进行很多的扩展，比如设置环境，设置错误信息打印，设置输入信息打印等等高级功能。那么一条命令就不能完成这些任务，所有 pm2 提供了配置文件的方式来启动～</p>
+<h4 id="pm2configjs">pm2.config.js</h4>
+<pre><code>// 名称任意，按照个人习惯来
+module.exports = {
+  apps: [
+    {
+      name: 'kaifazhe', // 应用名称
+      script: './build/server.js', // 启动文件地址
+      cwd: './', // 当前工作路径
+      watch: [
+        // 监控变化的目录，一旦变化，自动重启
+        'src',
+        'build',
+      ],
+      ignore_watch: [
+        // 忽视这些目录的变化
+        'node_modules',
+        'logs',
+        'public',
+      ],
+      node_args: '--harmony', // node的启动模式
+      env: {
+        NODE_ENV: 'development', // 设置运行环境，此时process.env.NODE_ENV的值就是development
+        ORIGIN_ADDR: 'http://www.yoduao.com'
+      },
+      env_production: {
+        NODE_ENV: 'production',
+      },
+      out_file: './logs/out.log', // 普通日志路径
+      error_file: './logs/err.log', // 错误日志路径
+      merge_logs: true,
+      log_date_format: 'YYYY-MM-DD HH:mm Z',
+    },
+  ],
+};
+复制代码
+</code></pre><blockquote>
+<p>对于上面的 env，我们可以在内部添加很多个参数变量，这样我们所使用的 process.env.XXX 就会对应发生变化,例如上面，我们 process.env.ORIGIN_ADDR 的值就是<code>http://www.youdao.com</code>～</p>
+</blockquote>
+<h3 id="负载均衡">负载均衡</h3>
+<p>最 666 的功能来了～自动给你做负载均衡，只需要一条命令，以前那些复杂的概念懂不懂无所谓。</p>
+<blockquote>
+<p>pm2 start server.js -i (number|max)</p>
+</blockquote>
+<pre><code># 开启三个进程运行项目
+pm2 start app.js -i 3
+# 根据机器CPU核数，开启对应数目的进程运行项目
+pm2 start app.js -i max
+复制代码
+</code></pre><blockquote>
+<p>配置文件里对应的：<code>&quot;instance&quot;: (number|max)</code></p>
+</blockquote>
+<pre><code>// pm2.config.js
+&quot;instances&quot;: 2,  // 启动两个实例
+复制代码
+</code></pre><h2 id="日志相关">日志相关</h2>
+<blockquote>
+<p>这里是时隔一年后补充的，当初只是为了简单写写总结，不过没想到这么多人点赞喜欢了，那么一年之后随着使用加深，对于pm2有个其他的总结，就补充一下～</p>
+</blockquote>
+<h3 id="pm2日志">pm2日志</h3>
+<p>上面配置文件可以看出来，我们可以配置logs，包括普通的out和错误的error日志。其实也不需要我们做什么，我们只需要在config里面配置好就行，他就会自动往里面写日志：</p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc36faa025f96-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc36faa025f96-1629864458221" />
+        </a>
+    </p>
+<p>很简单的功能，就包含了日志，真是美妙到不行，但是，真的那么美妙吗？哈哈，好像不是？我们的日志全部输出到了<code>err.log</code>和<code>out.log</code>内，日积月累，OMG不敢想象，排查问题肯定很费劲，所以就有了下面的日志分割～</p>
+<h3 id="日志分割">日志分割</h3>
+<p>我们正常意义上的日志，以node为例，应该都是使用的<code>log4js</code>来进行按日期写入的，那么pm2可不可以按日期写入呢？答案肯定是：可以。</p>
+<p>pm2为我们提供了插件系统，而日期分割功能就正好用到了插件系统：<a href="https://github.com/keymetrics/pm2-logrotate">pm2-logrotate</a></p>
+<p>安装：</p>
+<pre><code>pm2 install pm2-logrotate // 看好了，是pm2 install而不是npm install
+复制代码
+</code></pre><p>你装完之后它就自动启动，然后你还可以配置各种参数</p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc4453774c5c0-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc4453774c5c0-1629864458221" />
+        </a>
+    </p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc44d539417d8-1629864458221">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/16cdc44d539417d8-1629864458221" />
+        </a>
+    </p>
+<p>然后就完成了日志按日期分割～</p>
+<blockquote>
+<p>细心的小伙伴可能发现了，你上面让我安装的是<code>pm2-logrotate</code>，为啥你安装的是<code>pm2-logrotate-ext</code>，嗯，因为据说官方的<code>pm2-logrotate</code>存在一个bug，就是日期会正常分割，但是如果你前一天的文件没有写满比如你设置了1M但只写了500K那么第二天的日志还是会插入到原来的out.log(err.log)，所以大牛就写了这个解决了这个问题<a href="https://github.com/Lujo5/pm2-logrotate-ext">pm2-logrotate-ext</a></p>
+</blockquote>
+<h2 id="配合pm2-web实现监控可视化">配合pm2-web实现监控可视化</h2>
+<p>可能很多人不喜欢控制台，喜欢把监控数据进行可视化更方便查看和分析。不要紧，高手们已经为我们提供了工具，pm2-web，一看就是专门配合pm2来使用的。</p>
+<h3 id="安装-1">安装</h3>
+<pre><code>npm install -g pm2-web
+复制代码
+</code></pre><h3 id="使用">使用</h3>
+<p>默认pm2-web会自动启动一个端口8080，但是我们还是喜欢可控状态的，因此按照配置文件的方式启动。</p>
+<pre><code>$ pm2-web --config pm2-web-config.json
+复制代码
+// pm2-web-config.json
+{
+  &quot;www&quot;: {
+      &quot;host&quot;: &quot;localhost&quot;,
+      &quot;address&quot;: &quot;0.0.0.0&quot;,
+      &quot;port&quot;: 6688
+  }                         
+}
+复制代码
+</code></pre><p>这样你就可以在浏览器查看可视化的监控状态了～</p>
+<p>
+        <a data-fancybox="gallery" href="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f7afa936b0fd7-1629864458222">
+            <img class="mx-auto" alt="img" src="/images/PM2%e7%ae%80%e6%98%93%e4%bd%bf%e7%94%a8%e6%89%8b%e5%86%8c/166f7afa936b0fd7-1629864458222" />
+        </a>
+    </p>
+<blockquote>
+<p>说明一下，图片是我从网上找的，为什么没在本地启动呢，原因是<code>pm2-web</code>依赖<code>node-inspector</code>,而<code>node-inspector</code>对于高版本node无法安装，很多人提了issue，但是感觉开发者也处于放弃了的状态。我也不打算在本地安装低版本node，所以感兴趣的大家可以安装个低版本的试试～</p>
+</blockquote>
+<h3 id="谢谢">谢谢～～～</h3>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://huangweiliang.com/">黄伟亮</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/tools/">工具</a></li>
+        
+        <li><a href="/archives/">归档</a></li>
+        
+        <li><a href="/search/">搜索</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "hellowillian21/hellowillian21.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="https://huangweiliang.com/">黄伟亮的博客</a>
+        
+    </div>
+    <br />
+    <div>
+        本站仅为本人的学习笔记，部分内容来自网络，如果侵权请联系删除，谢谢大家！
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://huangweiliang.com/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://huangweiliang.com/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/" title="什么是HSL?">什么是HSL?</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/" title="使用github.dev随时随地编写代码">使用github.dev随时随地编写代码</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/" title="OAuth2的四种方式">OAuth2的四种方式</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="PM2简易使用手册">PM2简易使用手册</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://huangweiliang.com/categories/CSS/">CSS (1)</a></li>
+    
+    <li><a href="https://huangweiliang.com/categories/GitHub/">GitHub (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://huangweiliang.com/tags/CSS/">CSS</a>
+    
+    <a href="https://huangweiliang.com/tags/GitHub/">GitHub</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://duckweeds7.com/" title="Duckweeds7">Duckweeds7</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://www.huangzhishou.com/" title="黄智守的博客">黄智守的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://eps.ink" title="胡荣的博客">胡荣的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="https://chrischan13.gitee.io/wdnmd/" title="WDNMD">WDNMD</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://blog.lliiooiill.cn/" title="lliiooiill">lliiooiill</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://huangweiliang.com/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+
+    <title>OAuth2的四种方式 | 黄伟亮的博客</title>
+    <meta property="og:title" content="OAuth2的四种方式 - 黄伟亮的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2021-08-25T14:42:16&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2021-08-25T14:42:16&#43;08:00'>
+        
+    <meta name="Keywords" content="JavaScript,javascriptvue,react,黄伟亮,java,js,html,css,博客,项目管理,软件架构,小程序">
+    <meta name="description" content="OAuth2的四种方式">
+        
+    <meta name="author" content="黄伟亮">
+    <meta property="og:url" content="https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/">
+    <link rel="shortcut icon" href='/favicon.ico'  type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+    
+    
+        <link href="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" rel="stylesheet">
+    
+    
+    
+    
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://huangweiliang.com/">
+                        黄伟亮的博客
+                    </a>
+                
+                <p class="description">专注于JavaScript、Vue、React、HTML/CSS、小程序、Java、项目管理、软件架构</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://huangweiliang.com/">首页</a>
+                    
+                    <a  href="https://huangweiliang.com/tools/" title="工具">工具</a>
+                    
+                    <a  href="https://huangweiliang.com/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://huangweiliang.com/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -260px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#rfc-6749">RFC 6749</a></li>
+    <li><a href="#第一种授权方式授权码">第一种授权方式：授权码</a></li>
+    <li><a href="#第二种方式隐藏式">第二种方式：隐藏式</a></li>
+    <li><a href="#第三种方式密码式">第三种方式：密码式</a></li>
+    <li><a href="#第四种方式凭证式">第四种方式：凭证式</a></li>
+    <li><a href="#令牌的使用">令牌的使用</a></li>
+    <li><a href="#更新令牌">更新令牌</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">OAuth2的四种方式</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2021年8月25日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="rfc-6749">RFC 6749</h2>
+<p>OAuth 2.0 的标准是 <a href="https://tools.ietf.org/html/rfc6749">RFC 6749</a> 文件。该文件先解释了 OAuth 是什么。</p>
+<blockquote>
+<p>OAuth 引入了一个授权层，用来分离两种不同的角色：客户端和资源所有者。&hellip;&hellip;资源所有者同意以后，资源服务器可以向客户端颁发令牌。客户端通过令牌，去请求数据。</p>
+</blockquote>
+<p>这段话的意思就是，**OAuth 的核心就是向第三方应用颁发令牌。**然后，RFC 6749 接着写道：</p>
+<blockquote>
+<p>（由于互联网有多种场景，）本标准定义了获得令牌的四种授权方式（authorization grant ）。</p>
+</blockquote>
+<p>也就是说，**OAuth 2.0 规定了四种获得令牌的流程。你可以选择最适合自己的那一种，向第三方应用颁发令牌。**下面就是这四种授权方式。</p>
+<blockquote>
+<ul>
+<li>授权码（authorization-code）</li>
+<li>隐藏式（implicit）</li>
+<li>密码式（password）：</li>
+<li>客户端凭证（client credentials）</li>
+</ul>
+</blockquote>
+<p>注意，不管哪一种授权方式，第三方应用申请令牌之前，都必须先到系统备案，说明自己的身份，然后会拿到两个身份识别码：客户端 ID（client ID）和客户端密钥（client secret）。这是为了防止令牌被滥用，没有备案过的第三方应用，是不会拿到令牌的。</p>
+<h2 id="第一种授权方式授权码">第一种授权方式：授权码</h2>
+<p><strong>授权码（authorization code）方式，指的是第三方应用先申请一个授权码，然后再用该码获取令牌。</strong></p>
+<p>这种方式是最常用的流程，安全性也最高，它适用于那些有后端的 Web 应用。授权码通过前端传送，令牌则是储存在后端，而且所有与资源服务器的通信都在后端完成。这样的前后端分离，可以避免令牌泄漏。</p>
+<p>第一步，A 网站提供一个链接，用户点击后就会跳转到 B 网站，授权用户数据给 A 网站使用。下面就是 A 网站跳转 B 网站的一个示意链接。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//b.com/oauth/authorize?
+</span><span style="color:#998;font-style:italic"></span>response_type<span style="color:#000;font-weight:bold">=</span>code<span style="color:#000;font-weight:bold">&amp;</span>
+client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID<span style="color:#000;font-weight:bold">&amp;</span>
+redirect_uri<span style="color:#000;font-weight:bold">=</span>CALLBACK_URL<span style="color:#000;font-weight:bold">&amp;</span>
+scope<span style="color:#000;font-weight:bold">=</span>read
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>response_type</code>参数表示要求返回授权码（<code>code</code>），<code>client_id</code>参数让 B 知道是谁在请求，<code>redirect_uri</code>参数是 B 接受或拒绝请求后的跳转网址，<code>scope</code>参数表示要求的授权范围（这里是只读）。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040902.jpg">
+            <img class="mx-auto" alt="img" src="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040902.jpg" />
+        </a>
+    </p>
+<p>第二步，用户跳转后，B 网站会要求用户登录，然后询问是否同意给予 A 网站授权。用户表示同意，这时 B 网站就会跳回<code>redirect_uri</code>参数指定的网址。跳转时，会传回一个授权码，就像下面这样。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//a.com/callback?code=AUTHORIZATION_CODE
+</span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>code</code>参数就是授权码。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040907.jpg">
+            <img class="mx-auto" alt="img" src="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040907.jpg" />
+        </a>
+    </p>
+<p>第三步，A 网站拿到授权码以后，就可以在后端，向 B 网站请求令牌。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//b.com/oauth/token?
+</span><span style="color:#998;font-style:italic"></span>client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID<span style="color:#000;font-weight:bold">&amp;</span>
+client_secret<span style="color:#000;font-weight:bold">=</span>CLIENT_SECRET<span style="color:#000;font-weight:bold">&amp;</span>
+grant_type<span style="color:#000;font-weight:bold">=</span>authorization_code<span style="color:#000;font-weight:bold">&amp;</span>
+code<span style="color:#000;font-weight:bold">=</span>AUTHORIZATION_CODE<span style="color:#000;font-weight:bold">&amp;</span>
+redirect_uri<span style="color:#000;font-weight:bold">=</span>CALLBACK_URL
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>client_id</code>参数和<code>client_secret</code>参数用来让 B 确认 A 的身份（<code>client_secret</code>参数是保密的，因此只能在后端发请求），<code>grant_type</code>参数的值是<code>AUTHORIZATION_CODE</code>，表示采用的授权方式是授权码，<code>code</code>参数是上一步拿到的授权码，<code>redirect_uri</code>参数是令牌颁发后的回调网址。</p>
+<p>
+        <a data-fancybox="gallery" href="../../static/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040904.jpg">
+            <img class="mx-auto" alt="img" src="../../static/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040904.jpg" />
+        </a>
+    </p>
+<p>第四步，B 网站收到请求以后，就会颁发令牌。具体做法是向<code>redirect_uri</code>指定的网址，发送一段 JSON 数据。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">9
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">{    
+<span style="color:#d14">&#34;access_token&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#d14">&#34;ACCESS_TOKEN&#34;</span>,
+<span style="color:#d14">&#34;token_type&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#d14">&#34;bearer&#34;</span>,
+<span style="color:#d14">&#34;expires_in&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">2592000</span>,
+<span style="color:#d14">&#34;refresh_token&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#d14">&#34;REFRESH_TOKEN&#34;</span>,
+<span style="color:#d14">&#34;scope&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#d14">&#34;read&#34;</span>,
+<span style="color:#d14">&#34;uid&#34;</span><span style="color:#000;font-weight:bold">:</span><span style="color:#099">100101</span>,
+<span style="color:#d14">&#34;info&#34;</span><span style="color:#000;font-weight:bold">:</span>{...}
+}
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 JSON 数据中，<code>access_token</code>字段就是令牌，A 网站在后端拿到了。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040905.jpg">
+            <img class="mx-auto" alt="img" src="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040905.jpg" />
+        </a>
+    </p>
+<h2 id="第二种方式隐藏式">第二种方式：隐藏式</h2>
+<p>有些 Web 应用是纯前端应用，没有后端。这时就不能用上面的方式了，必须将令牌储存在前端。<strong>RFC 6749 就规定了第二种方式，允许直接向前端颁发令牌。这种方式没有授权码这个中间步骤，所以称为（授权码）&ldquo;隐藏式&rdquo;（implicit）。</strong></p>
+<p>第一步，A 网站提供一个链接，要求用户跳转到 B 网站，授权用户数据给 A 网站使用。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//b.com/oauth/authorize?
+</span><span style="color:#998;font-style:italic"></span>response_type<span style="color:#000;font-weight:bold">=</span>token<span style="color:#000;font-weight:bold">&amp;</span>
+client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID<span style="color:#000;font-weight:bold">&amp;</span>
+redirect_uri<span style="color:#000;font-weight:bold">=</span>CALLBACK_URL<span style="color:#000;font-weight:bold">&amp;</span>
+scope<span style="color:#000;font-weight:bold">=</span>read
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>response_type</code>参数为<code>token</code>，表示要求直接返回令牌。</p>
+<p>第二步，用户跳转到 B 网站，登录后同意给予 A 网站授权。这时，B 网站就会跳回<code>redirect_uri</code>参数指定的跳转网址，并且把令牌作为 URL 参数，传给 A 网站。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//a.com/callback#token=ACCESS_TOKEN
+</span></code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>token</code>参数就是令牌，A 网站因此直接在前端拿到令牌。</p>
+<p>注意，令牌的位置是 URL 锚点（fragment），而不是查询字符串（querystring），这是因为 OAuth 2.0 允许跳转网址是 HTTP 协议，因此存在&quot;中间人攻击&quot;的风险，而浏览器跳转时，锚点不会发到服务器，就减少了泄漏令牌的风险。</p>
+<p>
+        <a data-fancybox="gallery" href="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040906.jpg">
+            <img class="mx-auto" alt="img" src="/images/OAuth2.0%e7%9a%84%e5%9b%9b%e7%a7%8d%e6%96%b9%e5%bc%8f/bg2019040906.jpg" />
+        </a>
+    </p>
+<p>这种方式把令牌直接传给前端，是很不安全的。因此，只能用于一些安全要求不高的场景，并且令牌的有效期必须非常短，通常就是会话期间（session）有效，浏览器关掉，令牌就失效了。</p>
+<h2 id="第三种方式密码式">第三种方式：密码式</h2>
+<p><strong>如果你高度信任某个应用，RFC 6749 也允许用户把用户名和密码，直接告诉该应用。该应用就使用你的密码，申请令牌，这种方式称为&quot;密码式&quot;（password）。</strong></p>
+<p>第一步，A 网站要求用户提供 B 网站的用户名和密码。拿到以后，A 就直接向 B 请求令牌。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//oauth.b.com/token?
+</span><span style="color:#998;font-style:italic"></span>grant_type<span style="color:#000;font-weight:bold">=</span>password<span style="color:#000;font-weight:bold">&amp;</span>
+username<span style="color:#000;font-weight:bold">=</span>USERNAME<span style="color:#000;font-weight:bold">&amp;</span>
+password<span style="color:#000;font-weight:bold">=</span>PASSWORD<span style="color:#000;font-weight:bold">&amp;</span>
+client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>grant_type</code>参数是授权方式，这里的<code>password</code>表示&quot;密码式&quot;，<code>username</code>和<code>password</code>是 B 的用户名和密码。</p>
+<p>第二步，B 网站验证身份通过后，直接给出令牌。注意，这时不需要跳转，而是把令牌放在 JSON 数据里面，作为 HTTP 回应，A 因此拿到令牌。</p>
+<p>这种方式需要用户给出自己的用户名/密码，显然风险很大，因此只适用于其他授权方式都无法采用的情况，而且必须是用户高度信任的应用。</p>
+<h2 id="第四种方式凭证式">第四种方式：凭证式</h2>
+<p><strong>最后一种方式是凭证式（client credentials），适用于没有前端的命令行应用，即在命令行下请求令牌。</strong></p>
+<p>第一步，A 应用在命令行向 B 发出请求。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//oauth.b.com/token?
+</span><span style="color:#998;font-style:italic"></span>grant_type<span style="color:#000;font-weight:bold">=</span>client_credentials<span style="color:#000;font-weight:bold">&amp;</span>
+client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID<span style="color:#000;font-weight:bold">&amp;</span>
+client_secret<span style="color:#000;font-weight:bold">=</span>CLIENT_SECRET
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>grant_type</code>参数等于<code>client_credentials</code>表示采用凭证式，<code>client_id</code>和<code>client_secret</code>用来让 B 确认 A 的身份。</p>
+<p>第二步，B 网站验证通过以后，直接返回令牌。</p>
+<p>这种方式给出的令牌，是针对第三方应用的，而不是针对用户的，即有可能多个用户共享同一个令牌。</p>
+<h2 id="令牌的使用">令牌的使用</h2>
+<p>A 网站拿到令牌以后，就可以向 B 网站的 API 请求数据了。</p>
+<p>此时，每个发到 API 的请求，都必须带有令牌。具体做法是在请求的头信息，加上一个<code>Authorization</code>字段，令牌就放在这个字段里面。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">curl -H <span style="color:#d14">&#34;Authorization: Bearer ACCESS_TOKEN&#34;</span> <span style="color:#d14">\
+</span><span style="color:#d14"></span><span style="color:#d14">&#34;https://api.b.com&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面命令中，<code>ACCESS_TOKEN</code>就是拿到的令牌。</p>
+<h2 id="更新令牌">更新令牌</h2>
+<p>令牌的有效期到了，如果让用户重新走一遍上面的流程，再申请一个新的令牌，很可能体验不好，而且也没有必要。OAuth 2.0 允许用户自动更新令牌。</p>
+<p>具体方法是，B 网站颁发令牌的时候，一次性颁发两个令牌，一个用于获取数据，另一个用于获取新的令牌（refresh token 字段）。令牌到期前，用户使用 refresh token 发一个请求，去更新令牌。</p>
+<blockquote>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">https<span style="color:#000;font-weight:bold">:</span><span style="color:#998;font-style:italic">//b.com/oauth/token?
+</span><span style="color:#998;font-style:italic"></span>grant_type<span style="color:#000;font-weight:bold">=</span>refresh_token<span style="color:#000;font-weight:bold">&amp;</span>
+client_id<span style="color:#000;font-weight:bold">=</span>CLIENT_ID<span style="color:#000;font-weight:bold">&amp;</span>
+client_secret<span style="color:#000;font-weight:bold">=</span>CLIENT_SECRET<span style="color:#000;font-weight:bold">&amp;</span>
+refresh_token<span style="color:#000;font-weight:bold">=</span>REFRESH_TOKEN
+</code></pre></td></tr></table>
+</div>
+</div></blockquote>
+<p>上面 URL 中，<code>grant_type</code>参数为<code>refresh_token</code>表示要求更新令牌，<code>client_id</code>参数和<code>client_secret</code>参数用于确认身份，<code>refresh_token</code>参数就是用于更新令牌的令牌。</p>
+<p>B 网站验证通过以后，就会颁发新的令牌。</p>
+<p>写到这里，颁发令牌的四种方式就介绍完了。</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://huangweiliang.com/">黄伟亮</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/">https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/">PM2简易使用手册</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/tools/">工具</a></li>
+        
+        <li><a href="/archives/">归档</a></li>
+        
+        <li><a href="/search/">搜索</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "hellowillian21/hellowillian21.github.io"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                    <footer id="footer">
+    <div>
+        &copy; 2021 <a href="https://huangweiliang.com/">黄伟亮的博客</a>
+        
+    </div>
+    <br />
+    <div>
+        本站仅为本人的学习笔记，部分内容来自网络，如果侵权请联系删除，谢谢大家！
+    </div>
+</footer>
+
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script><script src="https://cdn.bootcdn.net/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://huangweiliang.com/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://huangweiliang.com/">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BB%80%E4%B9%88%E6%98%AFHSL/" title="什么是HSL?">什么是HSL?</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/%E4%BD%BF%E7%94%A8github.dev%E9%9A%8F%E6%97%B6%E9%9A%8F%E5%9C%B0%E7%BC%96%E5%86%99%E4%BB%A3%E7%A0%81/" title="使用github.dev随时随地编写代码">使用github.dev随时随地编写代码</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/OAuth2.0%E7%9A%84%E5%9B%9B%E7%A7%8D%E6%96%B9%E5%BC%8F/" title="OAuth2的四种方式">OAuth2的四种方式</a>
+    </li>
+    
+    <li>
+        <a href="https://huangweiliang.com/post/PM2%E7%AE%80%E6%98%93%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="PM2简易使用手册">PM2简易使用手册</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/categories/'>分类</a></h3>
+<ul class="widget-list">
+    
+    <li><a href="https://huangweiliang.com/categories/CSS/">CSS (1)</a></li>
+    
+    <li><a href="https://huangweiliang.com/categories/GitHub/">GitHub (1)</a></li>
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title"><a href='/tags/'>标签</a></h3>
+<div class="tagcloud">
+    
+    <a href="https://huangweiliang.com/tags/CSS/">CSS</a>
+    
+    <a href="https://huangweiliang.com/tags/GitHub/">GitHub</a>
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="https://duckweeds7.com/" title="Duckweeds7">Duckweeds7</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://www.huangzhishou.com/" title="黄智守的博客">黄智守的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://eps.ink" title="胡荣的博客">胡荣的博客</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="https://chrischan13.gitee.io/wdnmd/" title="WDNMD">WDNMD</a>
+        </li>
+        
+        <li>
+            <a target="_blank" href="http://blog.lliiooiill.cn/" title="lliiooiill">lliiooiill</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://huangweiliang.com/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,6 +1,6 @@
 baseURL = "https://www.maqiwei.com/"
 languageCode = "zh-CN"
-title = "马琪苇的博客"
+title = "yeahkiki的博客"
 theme = "maupassant"
 googleAnalytics = ""  # UA-XXXXXXXX-X
 publishDir="docs"
@@ -18,12 +18,12 @@ summaryLength = 140
 # disqusShortname = "yourdiscussshortname"  ## 是否开启disqus评论，不要和utteranc同时开启
 
 [author]
-  name = "马琪苇"
+  name = "yeahkiki"
 
 [params]
-  author = "马琪苇"
+  author = "yeahkiki的博客"
   subtitle = "专注设计与艺术"
-  keywords = "马琪苇,艺术,设计,UI,PhotoShop,Illustrator,Adobe,艺术家,C4D,AE"
+  keywords = "kiki,艺术,设计,UI,PhotoShop,Illustrator,Adobe,艺术家,C4D,AE"
   description = ""
   busuanzi = true #启用不算子网页统计
   googleAd = ""  #ca-pub-xxxxxxxxxxxxxx

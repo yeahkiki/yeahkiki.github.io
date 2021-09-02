@@ -4,6 +4,7 @@ title = "马琪苇的博客"
 theme = "maupassant"
 googleAnalytics = ""  # UA-XXXXXXXX-X
 publishDir="docs"
+uglyurls = true
 
 ## 保持分类的原始名字（false会做转小写处理）
 preserveTaxonomyNames = true
@@ -84,17 +85,17 @@ summaryLength = 140
   [[menu.main]]
     identifier = "tools"
     name = "工具"
-    url = "/tools/"
+    url = "/tools.html"
     weight = 2
 
   [[menu.main]]
     identifier = "archives"
     name = "归档"
-    url = "/archives/"
+    url = "/archives.html"
     weight = 3
 
   [[menu.main]]
     identifier = "about"
     name = "关于"
-    url = "/about/"
+    url = "/about.html"
     weight = 4

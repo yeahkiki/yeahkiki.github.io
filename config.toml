@@ -1,6 +1,6 @@
 baseURL = "https://www.maqiwei.com/"
 languageCode = "zh-CN"
-title = "yeahkiki的博客"
+title = "yeahkiki"
 theme = "maupassant"
 googleAnalytics = ""  # UA-XXXXXXXX-X
 publishDir="docs"
@@ -21,7 +21,7 @@ summaryLength = 140
   name = "yeahkiki"
 
 [params]
-  author = "yeahkiki的博客"
+  author = "yeahkiki"
   subtitle = "专注设计与艺术"
   keywords = "kiki,艺术,设计,UI,PhotoShop,Illustrator,Adobe,艺术家,C4D,AE"
   description = ""

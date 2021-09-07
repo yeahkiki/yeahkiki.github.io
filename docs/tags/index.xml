@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on yeahkiki的博客</title>
+    <title>Tags on yeahkiki</title>
     <link>https://www.maqiwei.com/tags.html</link>
-    <description>Recent content in Tags on yeahkiki的博客</description>
+    <description>Recent content in Tags on yeahkiki</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
     <lastBuildDate>Wed, 01 Sep 2021 15:22:22 +0800</lastBuildDate><atom:link href="https://www.maqiwei.com/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>碎碎念</title>
-      <link>https://www.maqiwei.com/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5.html</link>
-      <pubDate>Wed, 01 Sep 2021 15:22:22 +0800</pubDate>
-      
-      <guid>https://www.maqiwei.com/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5.html</guid>
-      <description></description>
-    </item>
-    
     <item>
       <title>设计</title>
       <link>https://www.maqiwei.com/tags/%E8%AE%BE%E8%AE%A1.html</link>
